@@ -1,0 +1,39 @@
+name: Process Command File
+
+on:
+  push:
+    paths:
+      - command.json
+
+jobs:
+  process-command:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3 python3-pip
+          python3 -m pip install --upgrade pip
+
+      - name: Process command.json
+        env:
+          DELETE_TOKEN: ${{ secrets.delete_token }}
+        run: |
+          python3 process_command.py
+
+      - name: Commit Changes
+        run: |
+          git config user.name "drkingali"
+          git config user.email "alijamali711@gmail.com"
+          git add command.json
+          git commit -m "Processed and updated command.json"
+          git push
