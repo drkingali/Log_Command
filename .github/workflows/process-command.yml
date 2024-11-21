@@ -5,6 +5,9 @@ on:
     paths:
       - command.json
 
+permissions:
+  contents: write
+
 jobs:
   process-command:
     runs-on: ubuntu-latest
@@ -25,8 +28,6 @@ jobs:
           python3 -m pip install --upgrade pip
 
       - name: Process command.json
-        env:
-          DELETE_TOKEN: ${{ secrets.DELETE_TOKEN }}
         run: |
           python3 process_command.py
 
