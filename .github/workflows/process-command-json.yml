@@ -30,6 +30,10 @@ jobs:
           jq 'map(select(.pageIdentifier != null and .uniqueCode != null and .remainingLogs != null and .signTime != null))' "$COMMAND_FILE" > cleaned_command.json || { echo "Failed to clean command.json"; exit 1; }
           mv cleaned_command.json "$COMMAND_FILE"
 
+          # اطمینان از تبدیل pageIdentifier، remainingLogs، و signTime به عدد
+          jq 'map(.pageIdentifier |= tonumber | .remainingLogs |= tonumber | .signTime |= tonumber)' "$COMMAND_FILE" > temp_command.json || { echo "Failed to convert fields to number"; exit 1; }
+          mv temp_command.json "$COMMAND_FILE"
+
           # پردازش فایل command.json
           jq '
           group_by(.pageIdentifier) | 
@@ -37,7 +41,7 @@ jobs:
             {
               pageIdentifier: .[0].pageIdentifier,
               items: (
-                . | sort_by(.signTime | tonumber)
+                . | sort_by(.signTime)
               )
             }
           ) |
@@ -47,16 +51,16 @@ jobs:
               pageIdentifier: $group.pageIdentifier,
               filteredItems: (
                 $group.items as $items |
-                ($items | map(.signTime | tonumber) | max) as $x |
-                ($items | map(select((.signTime | tonumber) >= ($x - 360) and (.signTime | tonumber) <= $x))) as $gamma |
-                ($gamma | max_by(.remainingLogs * 1000000 + (1000000 - .signTime | tonumber))) as $y |
-                ($y.remainingLogs | tonumber) as $z |
+                ($items | map(.signTime) | max) as $x |
+                ($items | map(select((.signTime >= ($x - 360) and .signTime <= $x)))) as $gamma |
+                ($gamma | max_by(.remainingLogs * 1000000 + (1000000 - .signTime))) as $y |
+                ($y.remainingLogs) as $z |
                 ($gamma | range(0; $z) | nth($gamma, .)) as $f |
-                ($items | map(select(.signTime | tonumber <= ($f.signTime | tonumber))))
+                ($items | map(select(.signTime <= $f.signTime)))
               )
             }
           ) |
-          sort_by(.pageIdentifier | tonumber) |
+          sort_by(.pageIdentifier) |
           map(.filteredItems) |
           flatten
           ' "$COMMAND_FILE" > updated_command.json || { echo "Failed to process command.json"; exit 1; }
