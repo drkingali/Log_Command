@@ -26,13 +26,13 @@ jobs:
 
       - name: Process command.json
         env:
-          DELETE_TOKEN: ${{ secrets.delete_token }}
+          DELETE_TOKEN: ${{ secrets.DELETE_TOKEN }}
         run: |
           python3 process_command.py
 
       - name: Commit Changes
         env:
-          TOKEN: ${{ secrets.delete_token }}
+          TOKEN: ${{ secrets.DELETE_TOKEN }}
         run: |
           git config user.name "drkingali"
           git config user.email "alijamali711@gmail.com"
