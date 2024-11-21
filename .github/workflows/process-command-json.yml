@@ -1,0 +1,72 @@
+name: Process command.json
+
+on:
+  push:
+    paths:
+      - 'command.json' # اجرا زمانی که فایل command.json بروز شود
+
+jobs:
+  process-command-json:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. کلون کردن مخزن
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # 2. پردازش فایل command.json
+      - name: Process command.json
+        run: |
+          # تعریف نام فایل و بررسی وجود آن
+          COMMAND_FILE="command.json"
+          if [ ! -f "$COMMAND_FILE" ]; then
+            echo "command.json not found."
+            exit 1
+          fi
+
+          # پردازش فایل command.json
+          jq '
+          group_by(.pageIdentifier) | 
+          map(
+            {
+              pageIdentifier: .[0].pageIdentifier,
+              items: (
+                . | sort_by(.signTime | tonumber)
+              )
+            }
+          ) |
+          map(
+            . as $group |
+            {
+              pageIdentifier: $group.pageIdentifier,
+              filteredItems: (
+                $group.items as $items |
+                ($items | map(.signTime | tonumber) | max) as $x |
+                ($items | map(select((.signTime | tonumber) >= ($x - 360) and (.signTime | tonumber) <= $x))) as $gamma |
+                ($gamma | max_by(.remainingLogs * 1000000 + (1000000 - .signTime | tonumber))) as $y |
+                ($y.remainingLogs | tonumber) as $z |
+                ($gamma | range(0; $z) | nth($gamma, .)) as $f |
+                ($items | map(select(.signTime | tonumber <= ($f.signTime | tonumber))))
+              )
+            }
+          ) |
+          sort_by(.pageIdentifier | tonumber) |
+          map(.filteredItems) |
+          flatten
+          ' "$COMMAND_FILE" > updated_command.json || { echo "Failed to process command.json"; exit 1; }
+
+          # جایگزینی فایل اصلی با فایل پردازش‌شده
+          mv updated_command.json "$COMMAND_FILE"
+
+      # 3. آپلود تغییرات به مخزن
+      - name: Push updates
+        env:
+          GH_TOKEN: ${{ secrets.DELETE_TOKEN }}
+        run: |
+          git config user.name "drkingali"
+          git config user.email "alijamali711@gmail.com"
+          git add command.json
+          git commit -m "Processed command.json with updated logic"
+          git push https://x-access-token:${{ secrets.DELETE_TOKEN }}@github.com/drkingali/Log_Command.git
