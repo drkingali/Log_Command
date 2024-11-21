@@ -34,8 +34,9 @@ jobs:
         env:
           TOKEN: ${{ secrets.DELETE_TOKEN }}
         run: |
+          cd $GITHUB_WORKSPACE
           git config user.name "drkingali"
           git config user.email "alijamali711@gmail.com"
           git add command.json
-          git commit -m "Processed and updated command.json"
+          git commit -m "Processed and updated command.json" || echo "No changes to commit"
           git push https://drkingali:${TOKEN}@github.com/drkingali/Log_Command.git
