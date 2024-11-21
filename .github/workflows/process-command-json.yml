@@ -26,6 +26,10 @@ jobs:
             exit 1
           fi
 
+          # حذف شیء‌هایی که شامل مقادیر null هستند
+          jq 'map(select(.pageIdentifier != null and .uniqueCode != null and .remainingLogs != null and .signTime != null))' "$COMMAND_FILE" > cleaned_command.json || { echo "Failed to clean command.json"; exit 1; }
+          mv cleaned_command.json "$COMMAND_FILE"
+
           # پردازش فایل command.json
           jq '
           group_by(.pageIdentifier) | 
