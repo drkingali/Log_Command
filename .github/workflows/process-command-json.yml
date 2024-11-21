@@ -1,80 +1,96 @@
-name: Process command.json
+name: Process Command File
 
 on:
   push:
     paths:
-      - 'command.json' # اجرا زمانی که فایل command.json بروز شود
+      - command.json
 
 jobs:
-  process-command-json:
+  process-command:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. کلون کردن مخزن
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          fetch-depth: 0
+          python-version: '3.9'
 
-      # 2. پردازش فایل command.json
-      - name: Process command.json
+      - name: Install Dependencies
         run: |
-          # تعریف نام فایل و بررسی وجود آن
-          COMMAND_FILE="command.json"
-          if [ ! -f "$COMMAND_FILE" ]; then
-            echo "command.json not found."
-            exit 1
-          fi
+          python -m pip install --upgrade pip
 
-          # حذف شیء‌هایی که شامل مقادیر null هستند
-          jq 'map(select(.pageIdentifier != null and .uniqueCode != null and .remainingLogs != null and .signTime != null))' "$COMMAND_FILE" > cleaned_command.json || { echo "Failed to clean command.json"; exit 1; }
-          mv cleaned_command.json "$COMMAND_FILE"
-
-          # اطمینان از تبدیل pageIdentifier، remainingLogs، و signTime به عدد
-          jq 'map(.pageIdentifier |= tonumber | .remainingLogs |= tonumber | .signTime |= tonumber)' "$COMMAND_FILE" > temp_command.json || { echo "Failed to convert fields to number"; exit 1; }
-          mv temp_command.json "$COMMAND_FILE"
-
-          # پردازش فایل command.json
-          jq '
-          group_by(.pageIdentifier) | 
-          map(
-            {
-              pageIdentifier: .[0].pageIdentifier,
-              items: (
-                . | sort_by(.signTime)
-              )
-            }
-          ) |
-          map(
-            . as $group |
-            {
-              pageIdentifier: $group.pageIdentifier,
-              filteredItems: (
-                $group.items as $items |
-                ($items | map(.signTime) | max) as $x |
-                ($items | map(select((.signTime >= ($x - 360) and .signTime <= $x)))) as $gamma |
-                ($gamma | max_by(.remainingLogs * 1000000 + (1000000 - .signTime))) as $y |
-                ($y.remainingLogs) as $z |
-                ($gamma | range(0; $z) | nth($gamma, .)) as $f |
-                ($items | map(select(.signTime <= $f.signTime)))
-              )
-            }
-          ) |
-          sort_by(.pageIdentifier) |
-          map(.filteredItems) |
-          flatten
-          ' "$COMMAND_FILE" > updated_command.json || { echo "Failed to process command.json"; exit 1; }
-
-          # جایگزینی فایل اصلی با فایل پردازش‌شده
-          mv updated_command.json "$COMMAND_FILE"
-
-      # 3. آپلود تغییرات به مخزن
-      - name: Push updates
+      - name: Process command.json
         env:
-          GH_TOKEN: ${{ secrets.DELETE_TOKEN }}
+          DELETE_TOKEN: ${{ secrets.delete_token }}
+        run: |
+          import json
+
+          # Step 1: Load the command.json file
+          with open('command.json', 'r') as file:
+              data = json.load(file)
+
+          # Step 2: Remove objects with any null values
+          clean_data = [item for item in data if all(value is not None for value in item.values())]
+
+          # Step 3: Group by pageIdentifier
+          groups = {}
+          for item in clean_data:
+              page_id = int(item["pageIdentifier"])
+              if page_id not in groups:
+                  groups[page_id] = []
+              groups[page_id].append(item)
+
+          # Step 4: Process each group
+          processed_groups = {}
+          for page_id, items in groups.items():
+              # Find maximum signTime (x)
+              items = sorted(items, key=lambda x: int(x["signTime"]), reverse=True)
+              x = int(items[0]["signTime"])
+
+              # Select objects in the range [x-360, x]
+              gamma_items = [item for item in items if x - 360 <= int(item["signTime"]) <= x]
+              gamma_items.sort(key=lambda x: int(x["signTime"]))
+
+              # Find object y with max remainingLogs
+              y = max(
+                  gamma_items,
+                  key=lambda obj: (int(obj["remainingLogs"]), -int(obj["signTime"]))
+              )
+
+              z = int(y["remainingLogs"])
+
+              # Find object f after skipping z items from y
+              index_y = gamma_items.index(y)
+              f = None
+              if index_y + z < len(gamma_items):
+                  f = gamma_items[index_y + z]
+
+              # Remove objects with signTime greater than f
+              if f:
+                  items = [obj for obj in items if int(obj["signTime"]) <= int(f["signTime"])]
+
+              # Sort the remaining items by signTime
+              processed_groups[page_id] = sorted(items, key=lambda x: int(x["signTime"]))
+
+          # Step 5: Sort groups by pageIdentifier
+          sorted_groups = dict(sorted(processed_groups.items()))
+
+          # Flatten the sorted groups into a single list
+          final_output = []
+          for page_id, items in sorted_groups.items():
+              final_output.extend(items)
+
+          # Save processed data back to command.json
+          with open('command.json', 'w') as file:
+              json.dump(final_output, file, indent=4)
+
+      - name: Commit Changes
         run: |
           git config user.name "drkingali"
           git config user.email "alijamali711@gmail.com"
           git add command.json
-          git commit -m "Processed command.json with updated logic"
-          git push https://x-access-token:${{ secrets.DELETE_TOKEN }}@github.com/drkingali/Log_Command.git
+          git commit -m "Processed and updated command.json"
+          git push
