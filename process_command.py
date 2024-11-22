@@ -4,10 +4,13 @@ import json
 with open('command.json', 'r') as file:
     data = json.load(file)
 
-# Step 1: Remove objects with any null values or empty fields
+# Step 1: Remove objects with any null values, empty fields, or missing required keys
+required_keys = {"pageIdentifier", "uniqueCode", "remainingLogs", "signTime"}
+
 clean_data = [
     item for item in data 
-    if all(value is not None and value != "" and str(value).strip() != "" for value in item.values())
+    if all(key in item for key in required_keys) and  # بررسی وجود تمام کلیدها
+       all(value is not None and value != "" and str(value).strip() != "" for value in item.values())  # بررسی مقدار معتبر
 ]
 # Step 2: Group by pageIdentifier
 groups = {}
