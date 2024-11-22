@@ -1,66 +1,50 @@
 [
-  {
-    "pageIdentifier": "3333",
-    "uniqueCode": "id-p8wd0yglbzg",
-    "remainingLogs": 4,
-    "signTime": "2024112260194"
-  },
-  {
-    "pageIdentifier": "11111",
-    "uniqueCode": "id-ossa7yf4ixe"
-  },
-  {
-    "pageIdentifier": "44444",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 0,
-    "signTime": "2024112259773"
-  },
-  {
-    "pageIdentifier": "55555",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 4,
-    "signTime": "2024112259637"
-  },
-  {
-    "pageIdentifier": "123456",
-    "uniqueCode": "id-6v2365fxxwg",
-    "remainingLogs": 1,
-    "signTime": "2024112263237"
-  },
-  {
-    "pageIdentifier": "123456",
-    "uniqueCode": "id-ossa7yf4ixe",
-    "remainingLogs": 1,
-    "signTime": "2024112262926"
-  },
-  {
-    "pageIdentifier": "123456",
-    "uniqueCode": "id-sqzgoufpf7m",
-    "remainingLogs": null,
-    "signTime": "2024112263219"
-  },
-  {
-    "pageIdentifier": "123456",
-    "uniqueCode": "id-sqzgoufpf7m88",
-    "remainingLogs": null,
-    "signTime": "2024112263289"
-  },
-  {
-    "pageIdentifier": "135246",
-    "uniqueCode": "id-ossa7yf4ixe",
-    "remainingLogs": 3,
-    "signTime": "2024112262904"
-  },
-  {
-    "pageIdentifier": "8888888",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 3,
-    "signTime": "2024112259621"
-  },
-  {
-    "pageIdentifier": "999999999",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 4,
-    "signTime": "2024112258517"
-  }
+    {
+        "pageIdentifier": "3333",
+        "uniqueCode": "id-p8wd0yglbzg",
+        "remainingLogs": 4,
+        "signTime": "2024112260194"
+    },
+    {
+        "pageIdentifier": "44444",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 0,
+        "signTime": "2024112259773"
+    },
+    {
+        "pageIdentifier": "55555",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 4,
+        "signTime": "2024112259637"
+    },
+    {
+        "pageIdentifier": "123456",
+        "uniqueCode": "id-ossa7yf4ixe",
+        "remainingLogs": 1,
+        "signTime": "2024112262926"
+    },
+    {
+        "pageIdentifier": "123456",
+        "uniqueCode": "id-6v2365fxxwg",
+        "remainingLogs": 1,
+        "signTime": "2024112263237"
+    },
+    {
+        "pageIdentifier": "135246",
+        "uniqueCode": "id-ossa7yf4ixe",
+        "remainingLogs": 3,
+        "signTime": "2024112262904"
+    },
+    {
+        "pageIdentifier": "8888888",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 3,
+        "signTime": "2024112259621"
+    },
+    {
+        "pageIdentifier": "999999999",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 4,
+        "signTime": "2024112258517"
+    }
 ]
