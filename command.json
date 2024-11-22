@@ -1,14 +1,8 @@
 [
-  {
-    "pageIdentifier": "16666",
-    "uniqueCode": "",
-    "remainingLogs": null,
-    "signTime": "2024112266451"
-  },
-  {
-    "pageIdentifier": "16666",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 1,
-    "signTime": "2024112266473"
-  }
+    {
+        "pageIdentifier": "16666",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 1,
+        "signTime": "2024112266473"
+    }
 ]
