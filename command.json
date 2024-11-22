@@ -1,32 +1,26 @@
 [
-  {
-    "pageIdentifier": "44444",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 0,
-    "signTime": "2024112259773"
-  },
-  {
-    "pageIdentifier": "44444",
-    "uniqueCode": "id-p8wd0yglbzg",
-    "remainingLogs": 0,
-    "signTime": "2024112259778"
-  },
-  {
-    "pageIdentifier": "55555",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 4,
-    "signTime": "2024112259637"
-  },
-  {
-    "pageIdentifier": "8888888",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 3,
-    "signTime": "2024112259621"
-  },
-  {
-    "pageIdentifier": "999999999",
-    "uniqueCode": "id-e0e89rh87yq",
-    "remainingLogs": 4,
-    "signTime": "2024112258517"
-  }
+    {
+        "pageIdentifier": "44444",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 0,
+        "signTime": "2024112259773"
+    },
+    {
+        "pageIdentifier": "55555",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 4,
+        "signTime": "2024112259637"
+    },
+    {
+        "pageIdentifier": "8888888",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 3,
+        "signTime": "2024112259621"
+    },
+    {
+        "pageIdentifier": "999999999",
+        "uniqueCode": "id-e0e89rh87yq",
+        "remainingLogs": 4,
+        "signTime": "2024112258517"
+    }
 ]
