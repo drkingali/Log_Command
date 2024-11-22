@@ -19,6 +19,12 @@
     },
     {
         "pageIdentifier": "64890",
+        "uniqueCode": "id-e0uue89rh87yq",
+        "remainingLogs": 4,
+        "signTime": "2024112208106"
+    },
+    {
+        "pageIdentifier": "64890",
         "uniqueCode": "id-e0e8jc9rh87yq",
         "remainingLogs": 4,
         "signTime": "2024112208116"
@@ -34,30 +40,12 @@
         "uniqueCode": "id-e0e89rjh87yq",
         "remainingLogs": 4,
         "signTime": "2024112208146"
-    },    
+    },
     {
         "pageIdentifier": "64890",
         "uniqueCode": "id-e0ipe89rh87yq",
         "remainingLogs": 4,
         "signTime": "2024112208156"
-    },
-    {
-        "pageIdentifier": "64890",
-        "uniqueCode": "id-e0ooe89rh87yq",
-        "remainingLogs": 4,
-        "signTime": "2024112208176"
-    },
-    {
-        "pageIdentifier": "64890",
-        "uniqueCode": "id-e0e8ca9rh87yq",
-        "remainingLogs": 4,
-        "signTime": "2024112208196"
-    },
-    {
-        "pageIdentifier": "64890",
-        "uniqueCode": "id-e0uue89rh87yq",
-        "remainingLogs": 4,
-        "signTime": "2024112208106"
     },
     {
         "pageIdentifier": "88888",
