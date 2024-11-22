@@ -4,9 +4,11 @@ import json
 with open('command.json', 'r') as file:
     data = json.load(file)
 
-# Step 1: Remove objects with any null values
-clean_data = [item for item in data if all(value is not None for value in item.values())]
-
+# Step 1: Remove objects with any null values or empty fields
+clean_data = [
+    item for item in data 
+    if all(value is not None and value != "" and str(value).strip() != "" for value in item.values())
+]
 # Step 2: Group by pageIdentifier
 groups = {}
 for item in clean_data:
