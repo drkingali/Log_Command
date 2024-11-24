@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write
   
-concurrency:
+  concurrency:
   group: process-command-group
   cancel-in-progress: true
 
