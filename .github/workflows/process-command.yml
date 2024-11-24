@@ -8,11 +8,7 @@ on:
 permissions:
   contents: write
 
-  concurrency:
-  group: process-command-group
-  cancel-in-progress: false
-
-jobs:
+  jobs:
   process-command:
     runs-on: ubuntu-latest
 
