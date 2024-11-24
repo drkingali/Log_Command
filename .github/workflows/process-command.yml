@@ -7,6 +7,10 @@ on:
 
 permissions:
   contents: write
+  
+concurrency:
+  group: process-command-group
+  cancel-in-progress: true
 
   jobs:
   process-command:
